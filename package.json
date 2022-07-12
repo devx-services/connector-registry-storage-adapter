@@ -2,7 +2,7 @@
   "name": "connector-registry-storage-adapter",
   "version": "1.0.0",
   "description": "Adapter for Connector Registry github storage",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc --build",
     "clean": "tsc --build --clean",
