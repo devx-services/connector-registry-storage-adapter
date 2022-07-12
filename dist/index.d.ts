@@ -5,6 +5,9 @@ interface IConnector {
     author: string;
     provider: any;
 }
+interface IConnectorsMetadataList {
+    [key: string]: IConnectorMetadata;
+}
 interface IConnectorMetadata {
     name: string;
     description: string;
@@ -15,8 +18,9 @@ interface IConnectorMetadata {
 }
 declare class ConnectorRegistryStorage {
     metadataPath: string;
+    archivePath: string;
     constructor();
-    getList(): Promise<IConnectorMetadata[]>;
-    get(name: string, version: string): void;
+    getList(): Promise<Error | IConnectorsMetadataList>;
+    get(name: string, version: string): Promise<IConnector | Error>;
+    private generateArchivePath;
 }
-declare const cn: ConnectorRegistryStorage;
