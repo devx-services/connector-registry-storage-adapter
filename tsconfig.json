@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "importHelpers": true,
+    "module": "commonjs",
+    "outDir": "dist",
+    "strict": true,
+    "target": "es2019"
+  },
+  "include": [
+    "./*",
+  ],
+  "exclude": [
+    "node_modules/*"
+  ]
+}
