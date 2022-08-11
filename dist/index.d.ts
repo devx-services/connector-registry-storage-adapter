@@ -17,9 +17,6 @@ interface IConnectorMetadata {
     url: string;
 }
 declare class ConnectorRegistryStorage {
-    metadataPath: string;
-    archivePath: string;
-    constructor();
     getList(): Promise<Error | IConnectorsMetadataList>;
     get(name: string, version: string): Promise<IConnector | Error>;
     private generateArchivePath;
