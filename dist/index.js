@@ -10,16 +10,30 @@ the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTA
 OF ANY KIND, either express or implied. See the License for the specific language
 governing permissions and limitations under the License.
 */
-require('dotenv').config();
 const axios = require('axios').default;
 class ConnectorRegistryStorage {
+    constructor(metadataSourcePath = "https://raw.githubusercontent.com/devx-services/connector-registry/dev/connectors-metadata.json", archiveSourcePath = "https://raw.githubusercontent.com/devx-services/connector-registry/dev/archive") {
+        this.metadataSourcePath = metadataSourcePath;
+        this.archiveSourcePath = archiveSourcePath;
+    }
+    getMetadataSourcePath() {
+        return this.metadataSourcePath;
+    }
+    getArchiveSourcePath() {
+        return this.archiveSourcePath;
+    }
     async getList() {
         try {
-            const response = await axios.get(process.env.METADATA_SOURCE_PATH);
+            const response = await axios.get(this.getMetadataSourcePath());
             return response.data;
         }
         catch (error) {
-            return new Error("Cannot get list");
+            if (error instanceof Error) {
+                return new Error(`Cannot get list ${error.message}`);
+            }
+            else {
+                return new Error(`Cannot get list`);
+            }
         }
     }
     async get(name, version) {
@@ -32,7 +46,7 @@ class ConnectorRegistryStorage {
         }
     }
     generateArchivePath(name, version) {
-        return `${process.env.ARCHIVE_SOURCE_PATH}/${version}-${name}.json`;
+        return `${this.getArchiveSourcePath()}/${version}-${name}.json`;
     }
 }
 module.exports = ConnectorRegistryStorage;

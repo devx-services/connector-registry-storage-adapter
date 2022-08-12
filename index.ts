@@ -10,7 +10,6 @@ OF ANY KIND, either express or implied. See the License for the specific languag
 governing permissions and limitations under the License.
 */
 
-require('dotenv').config()
 const axios = require('axios').default;
 
 interface IConnector {
@@ -34,12 +33,35 @@ interface IConnectorMetadata {
 }
 
 class ConnectorRegistryStorage {
+    metadataSourcePath: string;
+    archiveSourcePath: string;
+
+    constructor(        
+        metadataSourcePath = "https://raw.githubusercontent.com/devx-services/connector-registry/dev/connectors-metadata.json",
+        archiveSourcePath = "https://raw.githubusercontent.com/devx-services/connector-registry/dev/archive"
+        ) {
+            this.metadataSourcePath = metadataSourcePath
+            this.archiveSourcePath = archiveSourcePath
+        }
+    
+    private getMetadataSourcePath():string {
+        return this.metadataSourcePath
+    }
+
+    private getArchiveSourcePath():string {
+        return this.archiveSourcePath
+    }
+    
     async getList():Promise<Error | IConnectorsMetadataList> {
         try {
-            const response = await axios.get(process.env.METADATA_SOURCE_PATH)
+            const response = await axios.get(this.getMetadataSourcePath())
             return response.data
-        } catch(error) {
-            return new Error("Cannot get list")
+        } catch(error:unknown) {  
+            if (error instanceof Error) {
+                return new Error(`Cannot get list ${error.message}`)             
+            } else {
+                return new Error(`Cannot get list`)             
+            }
         }        
     }
     async get(name:string, version:string): Promise<IConnector | Error> {
@@ -52,7 +74,7 @@ class ConnectorRegistryStorage {
     }
 
     private generateArchivePath(name:string, version:string):string {
-        return `${process.env.ARCHIVE_SOURCE_PATH}/${version}-${name}.json`
+        return `${this.getArchiveSourcePath()}/${version}-${name}.json`
     }
 }
 
