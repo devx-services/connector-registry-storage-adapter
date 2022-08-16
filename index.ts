@@ -56,9 +56,9 @@ class ConnectorRegistryStorage {
         try {
             const response = await axios.get(this.getMetadataSourcePath())
             return response.data
-        } catch(error:unknown) {  
+        } catch(error:unknown) {
             if (error instanceof Error) {
-                return new Error(`Cannot get list ${error.message}`)             
+                return new Error(`Cannot get list: ${error.message}`)             
             } else {
                 return new Error(`Cannot get list`)             
             }
@@ -68,8 +68,12 @@ class ConnectorRegistryStorage {
         try {
             const response = await axios.get(this.generateArchivePath(name, version))
             return response.data
-        } catch(error) {
-            return new Error("Cannot get connector")
+        } catch(error:unknown) {
+            if (error instanceof Error) {
+                return new Error(`Cannot get connector: ${error.message}`)             
+            } else {
+                return new Error(`Cannot get connector`)
+            }
         }
     }
 

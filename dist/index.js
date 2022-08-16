@@ -29,7 +29,7 @@ class ConnectorRegistryStorage {
         }
         catch (error) {
             if (error instanceof Error) {
-                return new Error(`Cannot get list ${error.message}`);
+                return new Error(`Cannot get list: ${error.message}`);
             }
             else {
                 return new Error(`Cannot get list`);
@@ -42,7 +42,12 @@ class ConnectorRegistryStorage {
             return response.data;
         }
         catch (error) {
-            return new Error("Cannot get connector");
+            if (error instanceof Error) {
+                return new Error(`Cannot get connector: ${error.message}`);
+            }
+            else {
+                return new Error(`Cannot get connector`);
+            }
         }
     }
     generateArchivePath(name, version) {
