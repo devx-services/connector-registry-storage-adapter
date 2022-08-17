@@ -36,49 +36,53 @@ class ConnectorRegistryStorage {
     metadataSourcePath: string;
     archiveSourcePath: string;
 
-    constructor(        
-        metadataSourcePath = "https://raw.githubusercontent.com/devx-services/connector-registry/dev/connectors-metadata.json",
-        archiveSourcePath = "https://raw.githubusercontent.com/devx-services/connector-registry/dev/archive"
-        ) {
-            this.metadataSourcePath = metadataSourcePath
-            this.archiveSourcePath = archiveSourcePath
-        }
-    
-    private getMetadataSourcePath():string {
+    constructor(
+        metadataSourcePath = "https://raw.githubusercontent.com/adobe/api-mesh-sources/main//connectors-metadata.json",
+        archiveSourcePath = "https://raw.githubusercontent.com/adobe/api-mesh-sources/main/archive"
+    ) {
+        this.metadataSourcePath = metadataSourcePath
+        this.archiveSourcePath = archiveSourcePath
+    }
+
+    private getMetadataSourcePath(): string {
         return this.metadataSourcePath
     }
 
-    private getArchiveSourcePath():string {
+    private getArchiveSourcePath(): string {
         return this.archiveSourcePath
     }
-    
-    async getList():Promise<Error | IConnectorsMetadataList> {
+
+    async getList(): Promise<Error | IConnectorsMetadataList> {
         try {
             const response = await axios.get(this.getMetadataSourcePath())
             return response.data
-        } catch(error:unknown) {
+        } catch (error: unknown) {
             if (error instanceof Error) {
-                return new Error(`Cannot get list: ${error.message}`)             
+                return new Error(`Cannot get list: ${error.message}`)
             } else {
-                return new Error(`Cannot get list`)             
+                return new Error(`Cannot get list`)
             }
-        }        
+        }
     }
-    async get(name:string, version:string): Promise<IConnector | Error> {
+    async get(name: string, version: string): Promise<IConnector | Error> {
         try {
             const response = await axios.get(this.generateArchivePath(name, version))
             return response.data
-        } catch(error:unknown) {
+        } catch (error: unknown) {
             if (error instanceof Error) {
-                return new Error(`Cannot get connector: ${error.message}`)             
+                return new Error(`Cannot get connector: ${error.message}`)
             } else {
                 return new Error(`Cannot get connector`)
             }
         }
     }
 
-    private generateArchivePath(name:string, version:string):string {
-        return `${this.getArchiveSourcePath()}/${version}-${name}.json`
+    private generateArchivePath(name: string, version: string): string {
+        return `${this.getArchiveSourcePath()}/${version}-${this.normalizeName(name)}.json`
+    }
+
+    private normalizeName(name: string): string {
+        return name.toLocaleLowerCase().split(' ').join('-');
     }
 }
 
