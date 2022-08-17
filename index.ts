@@ -37,11 +37,12 @@ class ConnectorRegistryStorage {
     archiveSourcePath: string;
 
     constructor(
-        metadataSourcePath = "https://raw.githubusercontent.com/adobe/api-mesh-sources/main//connectors-metadata.json",
-        archiveSourcePath = "https://raw.githubusercontent.com/adobe/api-mesh-sources/main/archive"
+        storagePath = "https://raw.githubusercontent.com/adobe/api-mesh-sources/main",
+        metadataSourcePath = "connectors-metadata.json",
+        archiveSourcePath = "archive"
     ) {
-        this.metadataSourcePath = metadataSourcePath
-        this.archiveSourcePath = archiveSourcePath
+        this.metadataSourcePath = `${storagePath}/${metadataSourcePath}`
+        this.archiveSourcePath = `${storagePath}/${archiveSourcePath}`
     }
 
     private getMetadataSourcePath(): string {
