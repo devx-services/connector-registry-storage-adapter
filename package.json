@@ -1,5 +1,5 @@
 {
-  "name": "connector-registry-storage-adapter",
+  "name": "source-registry-storage-adapter",
   "version": "1.0.0",
   "description": "Adapter for Connector Registry github storage",
   "main": "dist/index.js",
