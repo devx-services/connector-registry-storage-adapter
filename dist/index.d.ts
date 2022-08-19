@@ -19,10 +19,11 @@ interface IConnectorMetadata {
 declare class ConnectorRegistryStorage {
     metadataSourcePath: string;
     archiveSourcePath: string;
-    constructor(metadataSourcePath?: string, archiveSourcePath?: string);
+    constructor(storagePath?: string, metadataSourcePath?: string, archiveSourcePath?: string);
     private getMetadataSourcePath;
     private getArchiveSourcePath;
     getList(): Promise<Error | IConnectorsMetadataList>;
     get(name: string, version: string): Promise<IConnector | Error>;
     private generateArchivePath;
+    private normalizeName;
 }

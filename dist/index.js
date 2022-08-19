@@ -12,9 +12,9 @@ governing permissions and limitations under the License.
 */
 const axios = require('axios').default;
 class ConnectorRegistryStorage {
-    constructor(metadataSourcePath = "https://raw.githubusercontent.com/devx-services/connector-registry/dev/connectors-metadata.json", archiveSourcePath = "https://raw.githubusercontent.com/devx-services/connector-registry/dev/archive") {
-        this.metadataSourcePath = metadataSourcePath;
-        this.archiveSourcePath = archiveSourcePath;
+    constructor(storagePath = "https://raw.githubusercontent.com/adobe/api-mesh-sources/main", metadataSourcePath = "connectors-metadata.json", archiveSourcePath = "archive") {
+        this.metadataSourcePath = `${storagePath}/${metadataSourcePath}`;
+        this.archiveSourcePath = `${storagePath}/${archiveSourcePath}`;
     }
     getMetadataSourcePath() {
         return this.metadataSourcePath;
@@ -51,7 +51,10 @@ class ConnectorRegistryStorage {
         }
     }
     generateArchivePath(name, version) {
-        return `${this.getArchiveSourcePath()}/${version}-${name}.json`;
+        return `${this.getArchiveSourcePath()}/${version}-${this.normalizeName(name)}.json`;
+    }
+    normalizeName(name) {
+        return name.toLocaleLowerCase().split(' ').join('-');
     }
 }
 module.exports = ConnectorRegistryStorage;
